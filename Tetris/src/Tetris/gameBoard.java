@@ -43,7 +43,7 @@ public class gameBoard extends JFrame{
 		ScoreBanner sc = new ScoreBanner();
 		con.add(sc, BorderLayout.SOUTH);
 		
-	}
+	} 
 	
 	public static void main(String[] args) {
 		gameBoard frame = new gameBoard();

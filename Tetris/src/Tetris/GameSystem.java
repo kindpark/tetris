@@ -40,7 +40,7 @@ public class GameSystem extends JPanel{
 			leftMove();
 			ScoreBanner.dispScore.setText(String.valueOf(ScoreBanner.score));
 		}
-	};
+	}; 
 	//오른쪽 좌표 이동
 	private static final String RIGHT = "Right";
 	Action right = new AbstractAction(RIGHT) {

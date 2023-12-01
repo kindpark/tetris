@@ -19,5 +19,5 @@ public class ScoreBanner extends JPanel{
 		
 		add(dispScore, BorderLayout.SOUTH);
 	}
-	
+	   
 }

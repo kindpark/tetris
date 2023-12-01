@@ -9,7 +9,6 @@ public class Control extends Thread{
 				Thread.sleep(100);
 				gs.steadyDown();
 			}catch(InterruptedException e) {
-				
 			}
 		}
 	}
