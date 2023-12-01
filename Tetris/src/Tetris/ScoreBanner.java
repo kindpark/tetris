@@ -7,8 +7,6 @@ import javax.swing.JPanel;
 
 import javax.swing.SwingConstants;
 
-
-
 public class ScoreBanner extends JPanel{
 	public static int score = 0;
 

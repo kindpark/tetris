@@ -19,8 +19,10 @@ import java.awt.event.KeyListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
@@ -33,7 +35,7 @@ public class GameSystem extends JPanel{
 	int ypos = 0;
 	int direction = 0;
 	private static final String LEFT = "Left";
-	//¿ŞÂÊ ÁÂÇ¥ ÀÌµ¿
+	//ì™¼ìª½ ì¢Œí‘œ ì´ë™
 	Action left = new AbstractAction(LEFT) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -41,7 +43,7 @@ public class GameSystem extends JPanel{
 			ScoreBanner.dispScore.setText(String.valueOf(ScoreBanner.score));
 		}
 	}; 
-	//¿À¸¥ÂÊ ÁÂÇ¥ ÀÌµ¿
+	//ì˜¤ë¥¸ìª½ ì¢Œí‘œ ì´ë™
 	private static final String RIGHT = "Right";
 	Action right = new AbstractAction(RIGHT) {
 	    @Override
@@ -50,7 +52,7 @@ public class GameSystem extends JPanel{
 			ScoreBanner.dispScore.setText(String.valueOf(ScoreBanner.score));
 	    }
 	};
-	//±Ş¼Ó ÇÏ°­
+	//ê¸‰ì† í•˜ê°•
 	public static final String DOWN = "Down";
 	Action down = new AbstractAction(DOWN) {
 		@Override
@@ -59,7 +61,7 @@ public class GameSystem extends JPanel{
 			ScoreBanner.dispScore.setText(String.valueOf(ScoreBanner.score));
 		}
 	};
-	//È¸Àü
+	//íšŒì „
 	public static final String ENTER = "Enter";
 	Action enter = new AbstractAction(ENTER) {
 		@Override
@@ -69,7 +71,7 @@ public class GameSystem extends JPanel{
 			
 		}
 	};
-	//½ÃÀÛÇÏ´Â ¿ªÇÒ
+	//ì‹œì‘í•˜ëŠ” ì—­í• 
 	public static final String SPACE = "Space";
 	Action space = new AbstractAction(SPACE) {
 		@Override
@@ -77,10 +79,13 @@ public class GameSystem extends JPanel{
 			new Thread() {
 				@Override
 				public void run() {
-					while(true) {
+					while(gameOver()) {
 						try {
-							Thread.sleep(500);
-							steadyDown();
+
+	
+								Thread.sleep(500);
+								steadyDown();
+
 						}catch(InterruptedException e) {}
 					}
 				}
@@ -97,16 +102,16 @@ public class GameSystem extends JPanel{
 	Color[][] gamePad;  
 	Color[] shapeColor = {Color.blue, Color.red, Color.green, Color.yellow, Color.LIGHT_GRAY, 
 			Color.ORANGE, Color.pink};
-	//°´Ã¼ ¹è¿­·Î ÆÇÀ» ¸¸µé¾úÀ¸¹Ç·Î °´Ã¼·Î ¹Ş´Â´Ù.
+	//ê°ì²´ ë°°ì—´ë¡œ íŒì„ ë§Œë“¤ì—ˆìœ¼ë¯€ë¡œ ê°ì²´ë¡œ ë°›ëŠ”ë‹¤.
 	final Point[][][] shape = {
-			//ÀÏÀÚ
+			//ì¼ì
 		{
 			{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1) },
 			{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3) },
 			{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1) },
 			{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3) }
 		},
-			// ¿ªL
+			// ì—­L
 		{
 			{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(2, 0) },
 			{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(2, 2) },
@@ -120,28 +125,28 @@ public class GameSystem extends JPanel{
 			{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(0, 0) },
 			{ new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(2, 0) }
 		},
-			// Á¤»ç°¢Çü
+			// ì •ì‚¬ê°í˜•
 		{
 			{ new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(1, 1) },
 			{ new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(1, 1) },
 			{ new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(1, 1) },
 			{ new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(1, 1) }
 		},
-			// ÆòÇà
+			// í‰í–‰
 		{
 			{ new Point(1, 0), new Point(2, 0), new Point(0, 1), new Point(1, 1) },
 			{ new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(1, 2) },
 			{ new Point(1, 0), new Point(2, 0), new Point(0, 1), new Point(1, 1) },
 			{ new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(1, 2) }
 		},
-			// ¤Ç
+			// ã…—
 		{
 			{ new Point(1, 0), new Point(0, 1), new Point(1, 1), new Point(2, 1) },
 			{ new Point(1, 0), new Point(0, 1), new Point(1, 1), new Point(1, 2) },
 			{ new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(1, 2) },
 			{ new Point(1, 0), new Point(1, 1), new Point(2, 1), new Point(1, 2) }
 		},
-			// ¿ªÆòÇà
+			// ì—­í‰í–‰
 		{
 			{ new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(2, 1) },
 			{ new Point(1, 0), new Point(0, 1), new Point(1, 1), new Point(0, 2) },
@@ -149,12 +154,12 @@ public class GameSystem extends JPanel{
 			{ new Point(1, 0), new Point(0, 1), new Point(1, 1), new Point(0, 2) }
 		}
 	};
-	//°ÔÀÓÆÇ ¸¸µé±â
+	//ê²Œì„íŒ ë§Œë“¤ê¸°
 	public void makeTetrispad() {
 		gamePad = new Color[14][20];
 		for(int i = 0; i < 14; i++) {
 			for(int j = 0; j < 20; j++) {
-				if(i == 0 || i == 19 || j == 19 || i == 13) {
+				if(i == 0 || j == 19 || i == 13) {
 					gamePad[i][j] = Color.cyan;
 				}
 				else {
@@ -164,8 +169,7 @@ public class GameSystem extends JPanel{
 		}
 		makeTetrispieces();
 	}
-	
-	//Á¶°¢ ¸¸µå´Â ÀÛ¾÷
+	//ì¡°ê° ë§Œë“œëŠ” ì‘ì—…
 	public void makeTetrispieces() {
 		pieceA = new Point(5, 0); 
 		selectPieces =r.nextInt(6);
@@ -173,21 +177,20 @@ public class GameSystem extends JPanel{
 	
 	
 	public boolean gameOver() {
-		int d = 0;
-		for(int i = 0; i < 12; i++) {
-			if(gamePad[6][i] != Color.black) {
-				d++;
-				if(d >= 4) {
-					return true;
-				}
+		boolean b = true;
+		for(int i = 1; i <= 12; i++) {
+			if(gamePad[i][1] != Color.black) {
+				JOptionPane.showMessageDialog(null, "ê²Œì„ ì˜¤ë²„");
+				b = false;
+				break;
 			}
 		}
-		return false;
+		return b;
 	}
 
 	@Override
 	public void paintComponent(Graphics pc){
-		//º® »öÄ¥
+		//ë²½ ìƒ‰ì¹ 
 		pc.fillRect(0, 0, 26*14, 26*20);
 		for (int i = 0; i < 14; i++) {
 			for (int j = 0; j < 20; j++) {
@@ -197,7 +200,7 @@ public class GameSystem extends JPanel{
 		}
 		spawn(pc);
 	}
-	//ÁÙ Áö¿ì´Â ÀÛ¾÷
+	//ì¤„ ì§€ìš°ëŠ” ì‘ì—…
 	public void deleterow(int row) {
 		for(int j = row-1; j > 0; j--) {
 			for(int i = 1; i <= 12; i++) {
@@ -207,14 +210,14 @@ public class GameSystem extends JPanel{
 	}
 	public void fixThePiece() {
 		for(Point p : shape[selectPieces][direction]) {
-			gamePad[(p.x + pieceA.x/*ÀÌµ¿°Å¸® + aÀ§Ä¡*/)][(p.y + pieceA.y)] = shapeColor[selectPieces];
+			gamePad[(p.x + pieceA.x/*ì´ë™ê±°ë¦¬ + aìœ„ì¹˜*/)][(p.y + pieceA.y)] = shapeColor[selectPieces];
 			
 		}
 		lineClear();
 		makeTetrispieces();
 		gameOver();
 	}
-	//²Ë Ã¡À¸¸é Áö¿ì´Â ÀÛ¾÷ + Á¡¼ö ºÎ¿©
+	//ê½‰ ì°¼ìœ¼ë©´ ì§€ìš°ëŠ” ì‘ì—… + ì ìˆ˜ ë¶€ì—¬
 	public void lineClear() {
 		int a = 0;
 		for(int j = 18; j >= 0; j--) {
@@ -233,11 +236,11 @@ public class GameSystem extends JPanel{
 				a = 0;
 			}
 		}
-		//º¯È­Á¡ Àû¿ë
+		//ë³€í™”ì  ì ìš©
 		repaint();
 	}
 	
-	//±î¸¸°ÇÁö È®ÀÎ
+	//ê¹Œë§Œê±´ì§€ í™•ì¸
 	public boolean checkColor(int x, int y, int direction) {
 		for (Point p : shape[selectPieces][direction]) {
 			if (gamePad[p.x + x][p.y + y] != Color.BLACK) {
@@ -246,11 +249,11 @@ public class GameSystem extends JPanel{
 		}
 		return false;
 	}
-	//ºí·Ï»ı
+	//ë¸”ë¡ìƒ
 	private void spawn(Graphics g) {
 		g.setColor(shapeColor[selectPieces]);
 		for(Point p : shape[selectPieces][direction]) {
-			g.fillRect((p.x + pieceA.x) * 26, (p.y + pieceA.y) * 26, 25, 25);
+			g.fillRect((p.x + pieceA.x) * 26, (p.y + pieceA.y-2) * 26, 25, 25);
 		}
 	}
 
@@ -265,7 +268,7 @@ public class GameSystem extends JPanel{
 			g.fillRect(390, 675, 250, 250);
 		}
 	}
-	//ÁÂ ¿ì ÀÌµ¿
+	//ì¢Œ ìš° ì´ë™
 	public void rightMove() {
 		if(!checkColor(pieceA.x + 1, pieceA.y, direction)) {
 			pieceA.x++;
@@ -279,7 +282,7 @@ public class GameSystem extends JPanel{
 		}
 		repaint();
 	}
-	//¾Æ·¡·Î Âß ÇÏ¶ô
+	//ì•„ë˜ë¡œ ì­‰ í•˜ë½
 	public void steadyDown() {
 		if(!checkColor(pieceA.x, pieceA.y + 1, direction)) {
 			pieceA.y++;
@@ -289,7 +292,7 @@ public class GameSystem extends JPanel{
 		}
 		repaint();
 	}
-	//¹æÇâ ÀüÈ¯
+	//ë°©í–¥ ì „í™˜
 	public void changeDirection() {
 		
 		direction++;
